@@ -1,0 +1,79 @@
+<html>
+<head>
+	<script src="jquery.js"></script>
+	<script src="xss.js"></script>
+	<script>
+		function fun(){
+				//document.getElementById('test').innerHTML=document.getElementById('hey').value;
+				var test_data = document.getElementById('hey').value;
+				var filter_text = test_data;
+				filter_text = filterXSS(filter_text);
+				/*if(test_data==filter_text)
+				$("#test").html('okay, correct ' + test_data);
+				else
+				$("#test").html('not correct '+filter_text+ test_data);*/
+				//alert(test_data);
+				//$("#test").html(test_data);
+				//alert(filterXSS(test_data));
+				
+				var post_data = 
+				{
+					data: test_data
+				}
+				console.log(filterXSS(post_data.data));
+				$.post('/post', post_data, function(data, err){
+					if(data=='xss')
+						alert('xss attempted');
+					else
+						alert('all right');
+				});
+		}
+	</script>
+	<style>
+	#hey{
+	  width:100%;
+	  height:400px;
+	  background:skyblue;
+	  border:none;
+	  color:white;
+	  font-size:16px;
+	}
+	#test{
+		background:grey;
+		color:white;
+		padding:10px;
+	}
+	</style>
+</head>
+<body>
+	<textarea id="hey"></textarea>
+	<button onclick="fun();">Post</button>
+	<div id="test"></div>
+</body>
+</html>
+<!--<html>
+  <body>
+    <script language=javascript>
+      var txt='<IMG SRC=" &#14;  javascript:alert(\'buddy\');">';
+
+      var re1='.*?';	// Non-greedy match on filler
+      var re2='(?:[a-z][a-z]+)';	// Uninteresting: word
+      var re3='.*?';	// Non-greedy match on filler
+      var re4='(?:[a-z][a-z]+)';	// Uninteresting: word
+      var re5='.*?';	// Non-greedy match on filler
+      var re6='(?:[a-z][a-z]+)';	// Uninteresting: word
+      var re7='.*?';	// Non-greedy match on filler
+      var re8='(?:[a-z][a-z]+)';	// Uninteresting: word
+      var re9='.*?';	// Non-greedy match on filler
+      var re10='((?:[a-z][a-z]+))';	// Word 1
+
+      var p = new RegExp(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10,["i"]);
+      var m = p.exec(txt);
+      if (m != null)
+      {
+          var word1=m[1];
+          document.write("("+word1.replace(/</,"&lt;")+")"+"\n");
+      }
+    </script>
+  </body>
+</html>-->
